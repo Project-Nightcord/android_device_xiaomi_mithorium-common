@@ -52,50 +52,9 @@ BOARD_KERNEL_PAGESIZE :=  2048
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
 TARGET_KERNEL_ADDITIONAL_FLAGS := LLVM=1
 
-# Kernel - Mi-Thorium
-ifeq ($(TARGET_USES_MITHORIUM_KERNEL),true)
-TARGET_KERNEL_SOURCE := kernel/xiaomi/mithorium-$(TARGET_KERNEL_VERSION)/kernel
-
-TARGET_KERNEL_CONFIG := \
-    vendor/$(TARGET_BOARD_PLATFORM)-perf_defconfig \
-    vendor/common.config \
-    vendor/feature/android-12.config \
-    vendor/feature/erofs.config \
-    vendor/feature/exfat.config \
-    vendor/feature/kprobes.config \
-    vendor/feature/lmkd.config
-
-TARGET_KERNEL_RECOVERY_CONFIG := \
-    vendor/$(TARGET_BOARD_PLATFORM)-perf_defconfig \
-    vendor/common.config \
-    vendor/feature/erofs.config \
-    vendor/feature/exfat.config \
-    vendor/feature/ntfs.config \
-    vendor/feature/no-camera-stack.config \
-    vendor/feature/no-wlan-driver.config
-
 ifeq ($(PRODUCT_SET_DEBUGFS_RESTRICTIONS),true)
 TARGET_KERNEL_CONFIG += \
     vendor/debugfs.config
-endif
-
-ifeq ($(TARGET_KERNEL_VERSION),4.9)
-TARGET_KERNEL_CONFIG += \
-    vendor/feature/uclamp.config
-else ifeq ($(TARGET_KERNEL_VERSION),4.19)
-TARGET_KERNEL_CONFIG += \
-    vendor/feature/wireguard.config
-endif
-
-ifneq ($(shell grep CONFIG_KSU_STATIC_HOOKS $(TARGET_KERNEL_SOURCE)/techpack/KernelSU/kernel/ksu.c),)
-TARGET_KERNEL_CONFIG += \
-    vendor/feature/ksu_static_hooks.config
-endif
-endif
-
-ifeq ($(MITHORIUM_INTEGRATE_LINDROID),true)
-TARGET_KERNEL_CONFIG += \
-    vendor/feature/lindroid.config
 endif
 
 # ANT
