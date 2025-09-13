@@ -572,6 +572,8 @@ MITHORIUM_PRODUCT_PACKAGES += \
     android.hardware.usb.gadget-service.qti
 
 # Vibrator
+$(call soong_config_set, vibrator, vibratortargets, vibratoraidlV2target)
+
 ifneq ($(TARGET_USES_DEVICE_SPECIFIC_VIBRATOR),true)
 MITHORIUM_PRODUCT_PACKAGES += \
     vendor.qti.hardware.vibrator.service
