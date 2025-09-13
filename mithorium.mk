@@ -417,6 +417,11 @@ MITHORIUM_PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
+# Mountpoint
+PRODUCT_PACKAGES += \
+    vendor_dsp_mountpoint \
+    vendor_firmware_mnt_mountpoint
+
 # Network
 ifneq ($(TARGET_HAS_NO_RADIO),true)
 MITHORIUM_PRODUCT_PACKAGES += \
