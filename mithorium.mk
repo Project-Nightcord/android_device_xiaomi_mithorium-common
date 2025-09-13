@@ -283,14 +283,6 @@ MITHORIUM_PRODUCT_PACKAGES += \
     android.hardware.fastboot-service.xiaomi_mithorium_recovery \
     fastbootd
 
-# FM
-MITHORIUM_PRODUCT_PACKAGES += \
-    FMRadio \
-    libfmjni
-
-$(call soong_config_set_bool,libfmjni,no_fm_firmware,true)
-$(call soong_config_set,libfmjni,vendor,qcom)
-
 # Gatekeeper HAL
 ifneq ($(TARGET_USES_DEVICE_SPECIFIC_GATEKEEPER),true)
 MITHORIUM_PRODUCT_PACKAGES += \
@@ -309,9 +301,6 @@ MITHORIUM_PRODUCT_PACKAGES += \
 MITHORIUM_PRODUCT_PACKAGES += \
     android.hardware.health-service.qti \
     android.hardware.health-service.qti_recovery
-
-MITHORIUM_PRODUCT_PACKAGES += \
-    vendor.lineage.health-service.default
 
 # HIDL
 MITHORIUM_PRODUCT_PACKAGES += \
