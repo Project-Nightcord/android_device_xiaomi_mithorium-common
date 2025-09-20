@@ -106,6 +106,8 @@ on init
 # Time
 on property:sys.boot_completed=1
     restart time_daemon
+    # enable DT2W for xiaomi-ysl
+    write /proc/sys/dev/xiaomi_msm8953_touchscreen/enable_dt2w 1
 
 # USB
 on property:ro.product.vendor.model=*
