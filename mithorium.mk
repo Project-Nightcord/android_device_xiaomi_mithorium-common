@@ -649,7 +649,7 @@ $(call inherit-product, vendor/xiaomi/mithorium-common-4.19/mithorium-common-4.1
 endif
 
 # Inherit the display proprietary files
-$(call inherit-product, vendor/xiaomi/mititanium-common-graphics/mititanium-common-graphics-vendor.mk)
+$(call inherit-product, vendor/xiaomi/mithorium-common-graphics/mithorium-common-graphics-vendor.mk)
 
 # Extra
 EXTRA_DEVICE_BRACKET := low-end
