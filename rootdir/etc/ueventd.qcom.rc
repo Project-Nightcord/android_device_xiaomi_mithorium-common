@@ -445,3 +445,6 @@ firmware_directories /vendor/firmware_mnt/image/
 
 # socinfo
 /sys/devices/soc0           serial_number            0000    root    root
+
+# Wake gesture
+/sys/devices/platform/soc/78b7000.i2c/i2c-3/3-0020/input/input4 wake_gesture 0660    system  system
