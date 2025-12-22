@@ -4,4 +4,5 @@ get_prop(cnd, wifi_hal_prop);
 get_prop(cnd, vendor_mwqem_prop)
 
 # slm
+add_hwservice(cnd, vendor_hal_slmadapter_hwservice)
 get_prop(cnd, vendor_slm_prop)
