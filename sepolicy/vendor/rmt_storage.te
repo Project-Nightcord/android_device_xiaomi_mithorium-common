@@ -1,3 +1,5 @@
+allow rmt_storage sysfs_subsys:file { read open };
+
 # debugfs access
 userdebug_or_eng(`
   no_debugfs_restriction(`

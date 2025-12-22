@@ -26,3 +26,6 @@ type sysfs_kernel_sdhci_msm, fs_type, sysfs_type;
 
 # Subsystem
 type sysfs_modem_subsys, fs_type, sysfs_type;
+
+# msm_subsys
+type sysfs_subsys, sysfs_type, fs_type;

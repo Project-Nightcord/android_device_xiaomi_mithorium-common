@@ -55,6 +55,11 @@
 # Subsystems
 /sys/devices(/platform)?/soc/4080000\.qcom,mss/subsys[0-9]/state	u:object_r:sysfs_modem_subsys:s0
 
+# MSM_SUBSYS
+/sys/devices/platform/soc/1de0000\.qcom,venus/subsys[0-9]+/name				u:object_r:sysfs_subsys:s0
+/sys/devices/platform/soc/4080000\.qcom,mss/subsys[0-9]+/name				u:object_r:sysfs_subsys:s0
+/sys/devices/platform/soc/soc:qcom,kgsl-hyp/subsys[0-9]+/name				u:object_r:sysfs_subsys:s0
+
 # Sys files
 /sys/devices(/platform)?/soc/[a-f0-9]+.sdhci/mmc_host/mmc[0-9]/mmc0:[0-9]+(/.*)?	u:object_r:sysfs_mmc_host:s0
 /sys/devices(/platform)?/soc/78b6000\.i2c/i2c-2/2-[0-9a-f]+/leds(/.*)?		u:object_r:sysfs_leds:s0
