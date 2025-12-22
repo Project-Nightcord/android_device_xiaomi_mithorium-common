@@ -574,12 +574,6 @@ PRODUCT_BOOT_JARS += \
     telephony-ext
 endif
 
-# Thermal
-ifneq ($(TARGET_KERNEL_VERSION),4.19)
-MITHORIUM_PRODUCT_PACKAGES += \
-    android.hardware.thermal@2.0-service.qti.xiaomi_mithorium
-endif
-
 # USB
 MITHORIUM_PRODUCT_PACKAGES += \
     usb_compositions.conf \
