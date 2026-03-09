@@ -10,6 +10,11 @@ genfscon sysfs /firmware/devicetree/base/soc/sound/qcom,model	u:object_r:fdt_sou
 genfscon sysfs /devices/platform/soc/200f000.qcom,spmi/spmi-0/spmi0-00/200f000.qcom,spmi:qcom,pm8953@0:qcom,leds@a100 u:object_r:sysfs_leds:s0
 genfscon sysfs /devices/platform/soc/78b6000.i2c/i2c-2/2-0045/leds/ u:object_r:sysfs_leds:s0
 
+# MSM_SUBSYS
+genfscon sysfs /sys/devices/platform/soc/1de0000.qcom,venus/subsys4/name	u:object_r:sysfs_subsys:s0
+genfscon sysfs /sys/devices/platform/soc/4080000.qcom,mss/subsys0/name		u:object_r:sysfs_subsys:s0
+genfscon sysfs /sys/devices/platform/soc/soc:qcom,kgsl-hyp/subsys1/name		u:object_r:sysfs_subsys:s0
+
 # Power
 genfscon sysfs /devices/soc/soc:qcom,bcl/power_supply                u:object_r:sysfs_batteryinfo:s0
 genfscon sysfs /devices/soc/msm-bcl-21/power_supply                  u:object_r:sysfs_batteryinfo:s0
