@@ -1,1 +1,7 @@
 get_prop(cnd, wifi_hal_prop);
+
+# mwqem
+get_prop(cnd, vendor_mwqem_prop)
+
+# slm
+get_prop(cnd, vendor_slm_prop)
