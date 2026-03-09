@@ -4,8 +4,14 @@ vendor_public_prop(baseband_prop);
 # Dirac
 vendor_public_prop(dirac_prop);
 
+# mwqem property
+vendor_restricted_prop(vendor_mwqem_prop);
+
 # Subsystem state notifier
 vendor_internal_prop(vendor_subsys_state_notifier_prop);
+
+# slm property
+vendor_restricted_prop(vendor_slm_prop);
 
 # Xiaomi
 vendor_public_prop(vendor_xiaomi_prop);
