@@ -1,1 +1,3 @@
 #get_prop(wcnss_service, serialno_prop);
+
+allow wcnss_service init:unix_stream_socket connectto;
