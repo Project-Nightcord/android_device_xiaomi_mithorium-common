@@ -357,7 +357,10 @@ ifneq ($(TARGET_USES_DEVICE_SPECIFIC_KEYMASTER),true)
 MITHORIUM_PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-impl \
     android.hardware.keymaster@3.0-service \
-    android.hardware.keymaster@3.0.vendor
+    android.hardware.keymaster@3.0.vendor \
+    android.hardware.keymaster@4.0-service \
+    android.hardware.keymaster@4.0.vendor \
+    android.hardware.keymaster@4.1.vendor
 endif
 
 # Lights
