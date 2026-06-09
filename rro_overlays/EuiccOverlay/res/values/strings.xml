@@ -8,7 +8,7 @@
         {
             \"sim-slot-mappings\": [
                 {
-                    \"devices\":[\"Mi8937\", \"Mi8937_4_19\", \"Mi439\", \"Mi439_4_19\", \"land\", \"santoni\", \"prada\", \"rolex\", \"riva\", \"tiare\", \"ugglite\", \"ugg\", \"pine\", \"olive\", \"olivelite\", \"olivewood\"],
+                    \"devices\":[\"Mi8937\", \"Mi8937_4_19\", \"Mi439\", \"Mi439_4_19\", \"land\", \"santoni\", \"prada\", \"rolex\", \"riva\", \"tiare\", \"ugglite\", \"ugg\", \"pine\", \"olive\", \"olivelite\", \"olivewood\", \"vince\", \"ysl\", \"mido\", \"tiffany\", \"tissot\", \"rosy\"],
                     \"esim-slot-ids\": [0, 1],
                     \"psim-slot-ids\": []
                 }
