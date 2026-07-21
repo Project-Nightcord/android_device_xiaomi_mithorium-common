@@ -50,7 +50,7 @@ if [ -z "$ONLY_TARGET" ]; then
     setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${ANDROID_ROOT}" true
 
     # Warning headers and guards
-    write_headers "MiThoriumSSI Mi8937 Mi439_4_19 Tiare oxygen uter vince onc ysl mido tiffany tissot rosy"
+    write_headers "MiThoriumSSI Mi8937 Mi8953 Mi439_4_19 Tiare oxygen uter vince onc ysl mido tiffany tissot rosy"
 
     # The standard common blobs
     write_makefiles "${MY_DIR}/proprietary-files/misc.txt" true
