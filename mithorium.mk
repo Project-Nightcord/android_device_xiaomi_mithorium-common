@@ -299,6 +299,12 @@ include $(LOCAL_PATH)/gps/gps_vendor_product.mk
 MITHORIUM_PRODUCT_PACKAGES += \
     android.hardware.gnss@2.1.vendor
 
+MITHORIUM_PRODUCT_PACKAGES += \
+    gnss@2.0-base.policy \
+    gnss@2.0-xtra-daemon.policy \
+    gnss@2.0-xtwifi-client.policy \
+    gnss@2.0-xtwifi-inet-agent.policy
+
 # Health
 MITHORIUM_PRODUCT_PACKAGES += \
     android.hardware.health-service.qti \
