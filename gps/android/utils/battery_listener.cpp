@@ -409,9 +409,7 @@ HidlBatteryListenerImpl::~HidlBatteryListenerImpl()
         }
     }
     mDone = true;
-    if (NULL !=  mThread) {
-        mThread->join();
-    }
+    mThread->join();
 }
 
 void HidlBatteryListenerImpl::serviceDied(uint64_t cookie __unused,
@@ -428,9 +426,7 @@ void HidlBatteryListenerImpl::serviceDied(uint64_t cookie __unused,
     }
     mHealth = NULL;
     mCond.notify_one();
-    if (NULL !=  mThread) {
-        mThread->join();
-    }
+    mThread->join();
     std::lock_guard<std::mutex> _l(mLock);
     init();
 }

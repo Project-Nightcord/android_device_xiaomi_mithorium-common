@@ -1,4 +1,4 @@
-/* Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -37,9 +37,7 @@
 using namespace loc_core;
 
 BatchingAdapter::BatchingAdapter() :
-    LocAdapterBase(0,
-                   LocContext::getLocContext(LocContext::mLocationHalName),
-                   false, nullptr, true),
+    LocAdapterBase(0, LocContext::getLocContext(LocContext::mLocationHalName)),
     mOngoingTripDistance(0),
     mOngoingTripTBFInterval(0),
     mTripWithOngoingTBFDropped(false),
@@ -47,16 +45,11 @@ BatchingAdapter::BatchingAdapter() :
     mBatchingTimeout(0),
     mBatchingAccuracy(1),
     mBatchSize(0),
-    mTripBatchSize(0),
-    mSystemPowerState(POWER_STATE_UNKNOWN)
+    mTripBatchSize(0)
 {
     LOC_LOGD("%s]: Constructor", __func__);
     readConfigCommand();
     setConfigCommand();
-
-    // at last step, let us inform adapater base that we are done
-    // with initialization, e.g.: ready to process handleEngineUpEvent
-    doneInit();
 }
 
 void
@@ -120,7 +113,7 @@ BatchingAdapter::setConfigCommand()
 }
 
 void
-BatchingAdapter::stopClientSessions(LocationAPI* client, bool eraseSession)
+BatchingAdapter::stopClientSessions(LocationAPI* client)
 {
     LOC_LOGD("%s]: client %p", __func__, client);
 
@@ -139,9 +132,9 @@ BatchingAdapter::stopClientSessions(LocationAPI* client, bool eraseSession)
     }
     for (auto keyBatchingMode : vBatchingClient) {
         if (keyBatchingMode.batchingMode != BATCHING_MODE_TRIP) {
-            stopBatching(keyBatchingMode.client, keyBatchingMode.id, eraseSession);
+            stopBatching(keyBatchingMode.client, keyBatchingMode.id);
         } else {
-            stopTripBatchingMultiplex(keyBatchingMode.client, keyBatchingMode.id, eraseSession);
+            stopTripBatchingMultiplex(keyBatchingMode.client, keyBatchingMode.id);
         }
     }
 }
@@ -179,10 +172,7 @@ BatchingAdapter::handleEngineUpEvent()
             mAdapter.broadcastCapabilities(mAdapter.getCapabilities());
             mApi.setBatchSize(mAdapter.getBatchSize());
             mApi.setTripBatchSize(mAdapter.getTripBatchSize());
-            if ((POWER_STATE_SUSPEND != mAdapter.mSystemPowerState) &&
-                 POWER_STATE_SHUTDOWN != mAdapter.mSystemPowerState) {
-                mAdapter.restartSessions();
-            }
+            mAdapter.restartSessions();
             for (auto msg: mAdapter.mPendingMsgs) {
                 mAdapter.sendMsg(msg);
             }
@@ -501,22 +491,20 @@ BatchingAdapter::stopBatchingCommand(LocationAPI* client, uint32_t id)
 
 void
 BatchingAdapter::stopBatching(LocationAPI* client, uint32_t sessionId, bool restartNeeded,
-        const BatchingOptions& batchOptions, bool eraseSession)
+        const BatchingOptions& batchOptions)
 {
     LocationSessionKey key(client, sessionId);
     auto it = mBatchingSessions.find(key);
     if (it != mBatchingSessions.end()) {
         auto flpOptions = it->second;
         // Assume stop will be OK, restore session if not
-        if (eraseSession)
-            eraseBatchingSession(client, sessionId);
+        eraseBatchingSession(client, sessionId);
         mLocApi->stopBatching(sessionId,
                 new LocApiResponse(*getContext(),
-                [this, client, sessionId, flpOptions, restartNeeded, batchOptions, eraseSession]
+                [this, client, sessionId, flpOptions, restartNeeded, batchOptions]
                 (LocationError err) {
             if (LOCATION_ERROR_SUCCESS != err) {
-                if (eraseSession)
-                    saveBatchingSession(client, sessionId, batchOptions);
+                saveBatchingSession(client, sessionId, batchOptions);
             } else {
                 // if stopBatching is success, unregister for batch full event if this was the last
                 // batching session that is interested in batch full event
@@ -865,13 +853,13 @@ BatchingAdapter::startTripBatchingMultiplex(LocationAPI* client, uint32_t sessio
 
 void
 BatchingAdapter::stopTripBatchingMultiplex(LocationAPI* client, uint32_t sessionId,
-        bool restartNeeded, const BatchingOptions& batchOptions, bool eraseSession)
+        bool restartNeeded, const BatchingOptions& batchOptions)
 {
     LocationError err = LOCATION_ERROR_SUCCESS;
 
     if (mTripSessions.size() == 1) {
         mLocApi->stopOutdoorTripBatching(true, new LocApiResponse(*getContext(),
-                [this, restartNeeded, client, sessionId, batchOptions, eraseSession]
+                [this, restartNeeded, client, sessionId, batchOptions]
                 (LocationError err) {
             if (LOCATION_ERROR_SUCCESS == err) {
                 // if stopOutdoorTripBatching is success, unregister for batch full event if this
@@ -881,20 +869,17 @@ BatchingAdapter::stopTripBatchingMultiplex(LocationAPI* client, uint32_t session
                                   LOC_REGISTRATION_MASK_DISABLED);
                 }
             }
-            stopTripBatchingMultiplexCommon(err, client, sessionId, restartNeeded,
-                                            batchOptions, eraseSession);
+            stopTripBatchingMultiplexCommon(err, client, sessionId, restartNeeded, batchOptions);
         }));
         return;
     }
 
-    stopTripBatchingMultiplexCommon(err, client, sessionId, restartNeeded,
-                                    batchOptions, eraseSession);
+    stopTripBatchingMultiplexCommon(err, client, sessionId, restartNeeded, batchOptions);
 }
 
 void
 BatchingAdapter::stopTripBatchingMultiplexCommon(LocationError err, LocationAPI* client,
-        uint32_t sessionId, bool restartNeeded, const BatchingOptions& batchOptions,
-        bool eraseSession)
+        uint32_t sessionId, bool restartNeeded, const BatchingOptions& batchOptions)
 {
     auto itt = mTripSessions.find(sessionId);
     TripSessionStatus tripSess = itt->second;
@@ -908,8 +893,7 @@ BatchingAdapter::stopTripBatchingMultiplexCommon(LocationError err, LocationAPI*
         mTripWithOngoingTripDistanceDropped = true;
     }
 
-    if (eraseSession)
-        mTripSessions.erase(sessionId);
+    mTripSessions.erase(sessionId);
 
     if (mTripSessions.size() == 0) {
         mOngoingTripDistance = 0;
@@ -1036,60 +1020,6 @@ BatchingAdapter::restartTripBatching(bool queryAccumulatedDistance, uint32_t acc
             }));
         }
     }));
-}
-
-void
-BatchingAdapter::updateSystemPowerStateCommand(PowerStateType powerState)
-{
-    LOC_LOGD("%s]: powerState: %d", __func__, powerState);
-
-    struct MsgUpdateSystemPowerState : public LocMsg {
-        BatchingAdapter& mAdapter;
-        PowerStateType mPowerState;
-        inline MsgUpdateSystemPowerState(BatchingAdapter& adapter,
-                PowerStateType powerState) :
-            mAdapter(adapter),
-            mPowerState(powerState) {}
-        inline virtual void proc() const {
-            mAdapter.updateSystemPowerState(mPowerState);
-        }
-    };
-
-    sendMsg(new MsgUpdateSystemPowerState(*this, powerState));
-}
-
-void
-BatchingAdapter::suspendBatchingSessions()
-{
-    for (auto it = mBatchingSessions.begin(); it != mBatchingSessions.end(); ++it) {
-        LocationSessionKey key(it->first);
-        stopClientSessions(key.client, false);
-    }
-}
-
-void
-BatchingAdapter::updateSystemPowerState(PowerStateType systemPowerState)
-{
-
-    if (POWER_STATE_UNKNOWN != systemPowerState) {
-        mSystemPowerState = systemPowerState;
-
-        /*Manage active GNSS sessions based on power event*/
-        switch (systemPowerState){
-
-            case POWER_STATE_SUSPEND:
-            case POWER_STATE_SHUTDOWN:
-                suspendBatchingSessions();
-                LOC_LOGd("Suspending all Batching session -- powerState: %d", systemPowerState);
-                break;
-            case POWER_STATE_RESUME:
-                restartSessions();
-                LOC_LOGd("Re-starting all Batching session -- powerState: %d", systemPowerState);
-                break;
-            default:
-                break;
-        } // switch
-    }
 }
 
 void

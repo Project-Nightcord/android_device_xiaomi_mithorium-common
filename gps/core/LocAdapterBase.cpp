@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2014, 2016-2018, 2020-2021 The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2014, 2016-2020 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -88,8 +88,8 @@ void LocAdapterBase::
                         const GpsLocationExtended& locationExtended,
                         enum loc_sess_status status,
                         LocPosTechMask loc_technology_mask,
-                        GnssDataNotification* pDataNotify,
-                        int msInWeek)
+                        GnssDataNotification* /*pDataNotify*/,
+                        int /*msInWeek*/)
 {
     if (mLocAdapterProxyBase != NULL) {
         mLocAdapterProxyBase->reportPositionEvent((UlpLocation&)location,
@@ -102,7 +102,8 @@ void LocAdapterBase::
 }
 
 void LocAdapterBase::
-    reportSvEvent(const GnssSvNotification& /*svNotify*/)
+    reportSvEvent(const GnssSvNotification& /*svNotify*/,
+                  bool /*fromEngineHub*/)
 DEFAULT_IMPL()
 
 void LocAdapterBase::
@@ -151,7 +152,7 @@ DEFAULT_IMPL(false)
 
 bool LocAdapterBase::
     requestATL(int /*connHandle*/, LocAGpsType /*agps_type*/,
-               LocApnTypeMask /*apn_type_mask*/, SubId /*sub_id*/)
+               LocApnTypeMask /*apn_type_mask*/)
 DEFAULT_IMPL(false)
 
 bool LocAdapterBase::
@@ -161,7 +162,7 @@ DEFAULT_IMPL(false)
 bool LocAdapterBase::
     requestNiNotifyEvent(const GnssNiNotification &/*notify*/,
                          const void* /*data*/,
-                         const LocInEmergency emergencyState)
+                         const LocInEmergency /*emergencyState*/)
 DEFAULT_IMPL(false)
 
 void LocAdapterBase::
@@ -343,7 +344,7 @@ LocAdapterBase::updateClientsEventMask()
 DEFAULT_IMPL()
 
 void
-LocAdapterBase::stopClientSessions(LocationAPI* client, bool eraseSession)
+LocAdapterBase::stopClientSessions(LocationAPI* /*client*/)
 DEFAULT_IMPL()
 
 void
